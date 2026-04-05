@@ -1,0 +1,14 @@
+__pycache__/
+*.pyc
+*.pyo
+venv/
+env/
+.env
+.venv/
+
+# Ignore raw data files if they exceed github size limits (Git LFS)
+data/raw/
+
+# Model weights
+models/
+.cache/

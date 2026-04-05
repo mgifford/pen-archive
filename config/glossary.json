@@ -1,0 +1,27 @@
+{
+  "1980s": {
+    "people": ["David Suzuki", "Elinor Ostrom", "Helen Caldicott"],
+    "places": ["Peace Camp", "Parliament Hill", "Oka"],
+    "acronyms": {
+      "PERC": "Peace and Environment Resource Centre",
+      "PEN": "Peace and Environment News",
+      "CANDU": "Canada Deuterium Uranium"
+    }
+  },
+  "1990s": {
+    "people": ["Vandana Shiva", "Naomi Klein"],
+    "places": ["Clayoquot Sound", "Gatineau Park"],
+    "acronyms": {
+      "PERC": "Peace and Environment Resource Centre",
+      "PEN": "Peace and Environment News"
+    }
+  },
+  "default": {
+    "people": [],
+    "places": ["Ottawa", "Gatineau", "Centretown"],
+    "acronyms": {
+      "PERC": "Peace and Environment Resource Centre",
+      "PEN": "Peace and Environment News"
+    }
+  }
+}
