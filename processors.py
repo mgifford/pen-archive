@@ -2,7 +2,7 @@ import json
 import os
 from pydantic import BaseModel, Field
 import instructor
-from ollama import Client
+from openai import OpenAI
 from typing import List, Optional
 from pathlib import Path
 from query_logger import log_query
@@ -14,7 +14,7 @@ class DetectedEntities(BaseModel):
 
 class ProcessedDocument(BaseModel):
     markdown_content: str = Field(..., description="The cleaned, corrected Markdown text. Use [[Name]] for people and [Place] for places.")
-    date: str = Field(..., description="The extracted publication date. e.g. June 2025")
+    date: Optional[str] = Field(None, description="The extracted publication date. e.g. June 2025")
     volume: Optional[str] = Field(None, description="Volume number if found.")
     issue: Optional[str] = Field(None, description="Issue number if found.")
     detected_entities: DetectedEntities
@@ -22,7 +22,10 @@ class ProcessedDocument(BaseModel):
 class OllamaProcessor:
     def __init__(self, model_name: str = "phi3"):
         self.model_name = model_name
-        self.client = instructor.from_ollama(Client(), mode=instructor.Mode.JSON)
+        self.client = instructor.from_openai(
+            OpenAI(base_url="http://localhost:11434/v1", api_key="ollama"), 
+            mode=instructor.Mode.JSON
+        )
         
         glossary_path = Path(__file__).parent / "config" / "glossary.json"
         with open(glossary_path, 'r') as f:

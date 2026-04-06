@@ -22,14 +22,14 @@ class PenArchiveScraper:
             page.goto(self.start_url, wait_until="domcontentloaded", timeout=60000)
             
             # Wait for main content to load
-            page.wait_for_selector("a")
+            page.wait_for_selector("a", state="attached", timeout=10000)
             
-            # Find all links
-            links = page.locator("a").all()
+            # Find all links instantly using evaluate to avoid locator timeouts
+            links_data = page.evaluate('() => Array.from(document.querySelectorAll("a")).map(a => ({href: a.href, text: a.innerText}))')
             
-            for link in links:
-                href = link.get_attribute("href")
-                text = link.inner_text().strip()
+            for item in links_data:
+                href = item.get("href", "")
+                text = item.get("text", "").strip()
                 
                 # Check if it's a PDF or we can infer it's an archive edition
                 if href and (".pdf" in href.lower() or "attachments/original" in href.lower()):

@@ -6,8 +6,8 @@ env/
 .env
 .venv/
 
-# Ignore raw data files if they exceed github size limits (Git LFS)
-data/raw/
+# We are using Git LFS for raw data files instead of ignoring them
+# data/raw/
 
 # Model weights
 models/
