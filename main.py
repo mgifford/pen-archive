@@ -11,7 +11,7 @@ def main():
     parser = argparse.ArgumentParser(description="Inference Engineering Harness for PEN Archives")
     parser.add_argument("--scrape", action="store_true", help="Run the Playwright scraper")
     parser.add_argument("--process", action="store_true", help="Process downloaded PDFs")
-    parser.add_argument("--limit", type=int, default=1, help="Limit number of files to process")
+    parser.add_argument("--limit", type=int, default=0, help="Limit number of files to process. 0 means all.")
     
     args = parser.parse_args()
     
@@ -48,7 +48,7 @@ def main():
         
         processed = 0
         for item in manifest:
-            if processed >= args.limit:
+            if args.limit > 0 and processed >= args.limit:
                 break
                 
             pdf_filename = item['filename']

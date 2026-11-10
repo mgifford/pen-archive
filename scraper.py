@@ -2,7 +2,7 @@ import json
 import os
 from pathlib import Path
 from playwright.sync_api import sync_playwright
-import urllib.request
+import requests
 import re
 
 DATA_RAW_DIR = Path(__file__).parent / "data" / "raw"
@@ -73,8 +73,8 @@ class PenArchiveScraper:
             
         print(f"Saved {len(new_items)} new entries to manifest.")
 
-    def download_pdfs(self, limit=5):
-        """Helper to download a few for testing."""
+    def download_pdfs(self, limit=0):
+        """Helper to download a few for testing. 0 means no limit."""
         if not MANIFEST_FILE.exists():
             print("No manifest found.")
             return
@@ -84,7 +84,7 @@ class PenArchiveScraper:
             
         downloaded = 0
         for item in manifest:
-            if downloaded >= limit:
+            if limit > 0 and downloaded >= limit:
                 break
                 
             file_path = DATA_RAW_DIR / item['filename']
@@ -95,7 +95,13 @@ class PenArchiveScraper:
                     url = item['original_url']
                     if url.startswith('/'):
                         url = "https://www.perc.ca" + url
-                    urllib.request.urlretrieve(url, file_path)
+                    
+                    response = requests.get(url, headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'}, stream=True)
+                    response.raise_for_status()
+                    with open(file_path, 'wb') as pdf_file:
+                        for chunk in response.iter_content(chunk_size=8192):
+                            pdf_file.write(chunk)
+                            
                     print("Success.")
                     downloaded += 1
                 except Exception as e:
